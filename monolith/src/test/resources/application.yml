@@ -1,0 +1,14 @@
+spring:
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        show_sql: false
+        format_sql: true
+        highlight_sql: true
+        use_sql_comments: true
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE

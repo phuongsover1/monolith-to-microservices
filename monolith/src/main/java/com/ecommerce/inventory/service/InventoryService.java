@@ -1,14 +1,16 @@
 package com.ecommerce.inventory.service;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.ecommerce.common.exception.ResourceNotFoundException;
 import com.ecommerce.inventory.domain.Product;
 import com.ecommerce.inventory.dto.AdjustStockRequest;
 import com.ecommerce.inventory.dto.CreateProductRequest;
 import com.ecommerce.inventory.dto.ProductResponse;
 import com.ecommerce.inventory.repository.ProductRepository;
-import java.util.List;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
@@ -66,5 +68,17 @@ public class InventoryService {
     public void releaseStock(Long productId, int quantity) {
         Product product = getProductEntity(productId);
         product.releaseStock(quantity);
+    }
+
+    public ProductResponse reverseStock(Long id, AdjustStockRequest request) {
+        Product product = getProductEntity(id);
+        product.reserveStock(request.quantity());
+        return ProductResponse.from(product);
+    }
+
+    public ProductResponse releaseStock(Long id, AdjustStockRequest request) {
+        Product product = getProductEntity(id);
+        product.releaseStock(request.quantity());
+        return ProductResponse.from(product);
     }
 }

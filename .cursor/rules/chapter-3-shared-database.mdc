@@ -1,0 +1,20 @@
+---
+description: Chapter 3 context — keep shared database; no per-service DB separation yet
+alwaysApply: true
+---
+
+# Chapter 3: Shared Database
+
+The project is currently at **Chapter 3**. The system still uses a **shared database**.
+
+Database separation per service is covered in **Chapter 4**. Do not introduce it prematurely.
+
+## When generating code
+
+- Keep the shared database as-is in examples and refactors.
+- Do not split databases, add per-service datasource configs, or introduce database-per-service patterns unless explicitly requested.
+- Patterns (strangler fig, bounded contexts, service extraction, etc.) should assume one shared database for now.
+
+## When to separate databases
+
+Only refactor to separate databases when the user **explicitly requests** Chapter 4 work or database separation.

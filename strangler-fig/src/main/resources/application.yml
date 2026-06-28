@@ -1,0 +1,88 @@
+################################################################################
+# Strangler Fig Proxy — application configuration
+#
+# HOW TO SELECT A MIGRATION PHASE
+# ================================
+# Run with a Spring profile to activate a phase:
+#
+#   java -jar strangler-fig.jar --spring.profiles.active=phase2
+#
+# or set the environment variable:
+#
+#   SPRING_PROFILES_ACTIVE=phase3
+#
+################################################################################
+
+server:
+  port: 9090   # proxy listens here; clients point to this port instead of :8080
+
+strangler:
+  monolith-url: http://localhost:8080
+  inventory-service-url: http://localhost:8081
+  routes: []   # Phase 1: no rules → all traffic falls back to the monolith
+
+---
+# ──────────────────────────────────────────────────────────────────────────────
+# PHASE 2 — Extract inventory READS first (safe: read-only, no data mutation)
+#
+# The Inventory microservice now handles all GET requests for products.
+# The monolith still handles POST/PUT (writes) and all other domains.
+#
+# Sam Newman recommends migrating reads before writes because it is lower risk
+# and lets you validate the new service with real traffic before trusting it
+# with state-changing operations.
+# ──────────────────────────────────────────────────────────────────────────────
+spring:
+  config:
+    activate:
+      on-profile: phase2
+
+strangler:
+  routes:
+    - path-pattern: /api/inventory/**
+      http-method: GET
+      target: INVENTORY_SERVICE
+
+---
+# ──────────────────────────────────────────────────────────────────────────────
+# PHASE 3 — Inventory fully migrated (reads AND writes)
+#
+# All inventory traffic (GET, POST, PUT, DELETE, …) is now handled by the
+# Inventory microservice.  The monolith still owns orders, users, etc.
+# ──────────────────────────────────────────────────────────────────────────────
+spring:
+  config:
+    activate:
+      on-profile: phase3
+
+strangler:
+  routes:
+    - path-pattern: /api/inventory/**
+      http-method: "*"
+      target: INVENTORY_SERVICE
+
+---
+# ──────────────────────────────────────────────────────────────────────────────
+# PHASE 4 — Monolith strangled (hypothetical: all domains extracted)
+#
+# The monolith still runs as the fallback but should receive zero requests.
+# Once you have confirmed zero traffic via metrics, the monolith can be
+# decommissioned.
+# ──────────────────────────────────────────────────────────────────────────────
+spring:
+  config:
+    activate:
+      on-profile: phase4
+
+strangler:
+  routes:
+    - path-pattern: /api/inventory/**
+      http-method: "*"
+      target: INVENTORY_SERVICE
+    # When you add ORDER_SERVICE, USER_SERVICE etc., add them here:
+    # - path-pattern: /api/orders/**
+    #   http-method: "*"
+    #   target: ORDER_SERVICE
+    # - path-pattern: /api/users/**
+    #   http-method: "*"
+    #   target: USER_SERVICE

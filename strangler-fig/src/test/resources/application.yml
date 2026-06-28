@@ -1,0 +1,8 @@
+strangler:
+  monolith-url: http://monolith-test:8080
+  inventory-service-url: http://inventory-test:8081
+  routes: []
+
+logging:
+  level:
+    com.ecommerce.strangler: DEBUG

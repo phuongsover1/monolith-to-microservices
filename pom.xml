@@ -21,6 +21,8 @@
     <modules>
         <module>monolith</module>
         <module>ddd-learning</module>
+        <module>strangler-fig</module>
+        <module>inventory-service</module>
     </modules>
 
     <properties>

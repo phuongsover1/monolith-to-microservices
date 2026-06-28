@@ -6,7 +6,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
+
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "products")
@@ -32,6 +35,10 @@ public class Product {
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt = Instant.now();
+
+    @Version
+    @Column(name = "updated_at", nullable = false, updatable = false)
+    private Instant updatedAt;
 
     protected Product() {
     }

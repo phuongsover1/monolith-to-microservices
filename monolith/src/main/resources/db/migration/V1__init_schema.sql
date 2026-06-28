@@ -14,7 +14,8 @@ CREATE TABLE products (
     description TEXT,
     price_cents INTEGER NOT NULL CHECK (price_cents >= 0),
     stock_qty   INTEGER NOT NULL CHECK (stock_qty >= 0),
-    created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE orders (

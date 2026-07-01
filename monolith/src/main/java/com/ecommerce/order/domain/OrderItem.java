@@ -1,6 +1,5 @@
 package com.ecommerce.order.domain;
 
-import com.ecommerce.inventory.domain.Product;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -23,9 +22,8 @@ public class OrderItem {
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
+    @Column(nullable = false)
+    private Long productId;
 
     @Column(nullable = false)
     private int quantity;
@@ -36,10 +34,10 @@ public class OrderItem {
     protected OrderItem() {
     }
 
-    public OrderItem(Product product, int quantity) {
-        this.product = product;
+    public OrderItem(Long productId, int quantity, int priceCents) {
+        this.productId = productId;
         this.quantity = quantity;
-        this.unitPriceCents = product.getPriceCents();
+        this.unitPriceCents = priceCents;
     }
 
     void setOrder(Order order) {
@@ -50,8 +48,8 @@ public class OrderItem {
         return id;
     }
 
-    public Product getProduct() {
-        return product;
+    public Long getProductId() {
+        return productId;
     }
 
     public int getQuantity() {

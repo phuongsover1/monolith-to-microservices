@@ -59,3 +59,8 @@ server:
 logging:
   level:
     org.hibernate.SQL: DEBUG
+
+inventory:
+  client:
+    mode: remote
+    base-url: http://localhost:8081

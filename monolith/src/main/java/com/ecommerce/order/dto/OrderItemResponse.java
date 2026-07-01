@@ -1,5 +1,6 @@
 package com.ecommerce.order.dto;
 
+import com.ecommerce.inventory.dto.ProductResponse;
 import com.ecommerce.order.domain.OrderItem;
 
 public record OrderItemResponse(
@@ -8,17 +9,15 @@ public record OrderItemResponse(
         String productSku,
         String productName,
         int quantity,
-        int unitPriceCents
-) {
+        int unitPriceCents) {
 
-    public static OrderItemResponse from(OrderItem item) {
+    public static OrderItemResponse from(OrderItem item, ProductResponse product) {
         return new OrderItemResponse(
                 item.getId(),
-                item.getProduct().getId(),
-                item.getProduct().getSku(),
-                item.getProduct().getName(),
+                product.id(),
+                product.sku(),
+                product.name(),
                 item.getQuantity(),
-                item.getUnitPriceCents()
-        );
+                item.getUnitPriceCents());
     }
 }
